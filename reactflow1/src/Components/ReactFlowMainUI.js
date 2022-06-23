@@ -53,9 +53,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 
-
-
-
 const sourceNode = ({ data }) => {
   // console.log(data)
   return (
@@ -207,7 +204,7 @@ const nodeTypes = { source: sourceNode, destination: destinationNode }
 
 const getTextBox=(i)=>{
   const txt={
-    "id": "name"+i,
+  "id": "name"+i,
   "label": "Column Name",
   "defaultValue": "",
   "type": "text"
@@ -216,7 +213,7 @@ const getTextBox=(i)=>{
 }
 const checkbox1=(i)=>{
   const txt={
-    "id": "path"+i,
+  "id": "path"+i,
   "label": "Data Type",
   "defaultValue": "",
   "type": "text"
@@ -225,7 +222,7 @@ const checkbox1=(i)=>{
 }
 const checkbox2=(i)=>{
   const txt={
-    "id": "header"+i,
+  "id": "header"+i,
   "label": "Key Type",
   "defaultValue": "",
   "type": "text"
@@ -435,6 +432,7 @@ function ReactFlowMainUI() {
     inputStatePrev[selectedNodeId].push(getTextBox(fieldId));
     inputStatePrev[selectedNodeId].push(checkbox1(fieldId));
     inputStatePrev[selectedNodeId].push(checkbox2(fieldId));
+    console.log(inputStatePrev)
     setFormState(inputStatePrev);
     console.log(inputStatePrev)
     dynamicFormPrev[selectedNodeId] = stateListInitiator(inputStatePrev[selectedNodeId], selectedNodeId)

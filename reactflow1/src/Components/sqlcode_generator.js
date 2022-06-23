@@ -3,21 +3,25 @@ export default function generatePythonCode(structuredData, appName) {
     console.log('the structured data is:', structuredData)
 
     for (let obj of structuredData) {
-        console.log("type of node:", obj.type)
-        console.log("id of node:", obj.id)
-        if (obj.type === "source node") {
-            result += 'CREATE TABLE	'
-            result += '`' + obj.name + obj.id[8] + '`(\n'
-            result += '\t`' + obj.config.name.value + '` ' + obj.config.path.value + ' ' + obj.config.header.value + "\n"
-            result += ');' + "\n\n"
+        let i=0;
+        result += 'CREATE TABLE	`'+obj.name+obj.id.substring(3)+ '`(\n'
+        for(let obj2 in obj.config){
+            if(i%3==0){
+                if(i>2){
+                    result+= ',\n'
+                }
+                result+= '\t'+obj.config[obj2].value+' '
+            }
+            if(i%3==1){
+                result+= obj.config[obj2].value+' '
+            }
+            if(i%3==2){
+                result+= obj.config[obj2].value
+            }
+            i++
         }
-
-        if (obj.type === "destination node") {
-            result += 'CREATE TABLE	'
-            result += '`' + obj.name + obj.id[8] + '`(\n'
-            result += '\t`' + obj.config.name.value + '` ' + obj.config.path.value + ' ' + obj.config.header.value + "\n"
-            result += ');' + "\n\n"
-        }
+        result+= '\n);\n\n'
+        console.log('break')
     }
     console.log("The resultant sql file is:", result)
 

@@ -1,0 +1,98 @@
+[
+    {
+        "type": "Json",
+        "id": "1",
+        "formFeilds": [
+            {
+                "id": "name",
+                "label": "Column Name",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "path",
+                "label": "Data Type",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "header",
+                "label": "Key Type",
+                "defaultValue": "",
+                "type": "text"
+            }
+        ]
+    },
+    {
+        "type": "Xml",
+        "id": "2",
+        "formFeilds": [
+            {
+                "id": "name",
+                "label": "Column Name",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "path",
+                "label": "Data Type",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "header",
+                "label": "Key Type",
+                "defaultValue": "",
+                "type": "text"
+            }
+        ]
+    },
+    {
+        "type": "Csv",
+        "id": "3",
+        "formFeilds": [
+            {
+                "id": "name",
+                "label": "Column Name",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "path",
+                "label": "Data Type",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "header",
+                "label": "Key Type",
+                "defaultValue": "",
+                "type": "text"
+            }
+        ]
+    },
+    {
+        "type": "Xlsx",
+        "id": "4",
+        "formFeilds": [
+            {
+                "id": "name",
+                "label": "Column Name",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "path",
+                "label": "Data Type",
+                "defaultValue": "",
+                "type": "text"
+            },
+            {
+                "id": "header",
+                "label": "Key Type",
+                "defaultValue": "",
+                "type": "text"
+            }
+        ]
+    }
+]

@@ -9,7 +9,8 @@ import ReactFlow, {
   useNodes,
   useEdges,
   Background,
-  MiniMap
+  MiniMap,
+  MarkerType
 } from 'react-flow-renderer';
 
 
@@ -46,11 +47,11 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import CardActionArea from '@mui/material/CardActionArea';
 import { CardHeader } from '@mui/material';
-import image from './images/4.jpg';
-import image1 from './images/2.jpg';
-import image2 from './images/3.jpg';
+import image from './images/image1.jpeg';
+import image1 from './images/image2.jpeg';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import CustomEdge from './customedge';
+import { MyContext } from './globalContext.js';
 
 
 const sourceNode = ({ data }) => {
@@ -113,7 +114,6 @@ const sourceNode = ({ data }) => {
     </>
   )
 }
-
 
 const destinationNode = ({ data }) => {
   return (
@@ -202,6 +202,10 @@ const getFeildId = () => {
 
 const nodeTypes = { source: sourceNode, destination: destinationNode }
 
+const edgeTypes = {
+  custom: CustomEdge
+};
+
 
 const getTextBox = (i) => {
   const txt = {
@@ -232,8 +236,6 @@ const checkbox2 = (i) => {
 }
 
 
-
-
 function ReactFlowMainUI() {
 
   const reactFlowWrapper = useRef(null);
@@ -253,18 +255,20 @@ function ReactFlowMainUI() {
   const [nodeFormMapping, SetNodeFormMapping] = useState({});
   const forceUpdate = useForceUpdate();
   const [tabname, setTabName] = useState("")
+  const [relation, setrelation] = React.useState('')
 
 
-  const onConnect = useCallback((params) => {
-    setEdges((eds) => addEdge(params, eds))
-  }, []);
+  const onConnect = (params) => setEdges((eds) => addEdge({
+    ...params, type: 'custom', animated: true, rel: `${relation}`, markerEnd: { type: MarkerType.Arrow }
+  }, eds));
 
   useEffect(() => {
     if (edges.length !== 0) {
       setDataStructure(edges, nodes)
+      // {console.log("edges",edges)}
+      // console.log("rel2",relation)
     }
   }, [edges]);
-
 
   const setDataStructure = (edges, nodes) => {
     let objList = {}
@@ -296,14 +300,13 @@ function ReactFlowMainUI() {
 
   const pages = ['Click here for info'];
   const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -365,8 +368,6 @@ function ReactFlowMainUI() {
     return stateList
   }
 
-
-
   const onDrop = useCallback(
     (event) => {
       event.preventDefault();
@@ -427,8 +428,7 @@ function ReactFlowMainUI() {
     });
   };
 
-
-  const addcolumn = (nodeId) => {
+  const addcolumn = () => {
     let fieldId = getFeildId()
     let dynamicFormPrev = formValues;
     console.log("formvalues")
@@ -582,95 +582,91 @@ function ReactFlowMainUI() {
           </Toolbar>
         </Container>
       </AppBar>
-      <div className="dndflow">
-        <Grid container spacing={2}>
-          <Grid item xs={1.2}>
-            <LeftSidebar />
+      <MyContext.Provider value={[relation, setrelation]}>
+        <div className="dndflow">
+          <Grid container spacing={2}>
+            <Grid item xs={1.3}>
+              <LeftSidebar />
+            </Grid>
+            <Grid item xs={9.5}>
+
+
+              <div className="reactflow-wrapper" style={{ height: "90vh", width: "100%" }} ref={reactFlowWrapper}>
+                <ReactFlow
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onNodeDoubleClick={(event, node) => onDoubleClickOfNode(node)}
+                  onConnect={onConnect}
+                  onInit={setReactFlowInstance}
+                  onConnectEnd={onConnectEnd}
+                  nodeTypes={nodeTypes}
+                  edgeTypes={edgeTypes}
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
+                  fitView
+                >
+                  <Controls />
+                  <Background style={{ backgroundColor: "light green" }} />
+                  <MiniMap style={{ backgroundColor: "light blue" }} />
+                </ReactFlow>
+              </div>
+
+
+            </Grid>
+            <Grid item xs={1.2}>
+              <RightSidebar />
+            </Grid>
           </Grid>
-          <Grid item xs={9.6}>
-
-
-            <div className="reactflow-wrapper" style={{ height: "90vh", width: "100%" }} ref={reactFlowWrapper}>
-              <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onNodeDoubleClick={(event, node) => onDoubleClickOfNode(node)}
-                onConnect={onConnect}
-                onInit={setReactFlowInstance}
-                onConnectEnd={onConnectEnd}
-                nodeTypes={nodeTypes}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-                fitView
-              >
-                <Controls />
-                <Background style={{ backgroundColor: "light green" }} />
-                <MiniMap style={{ backgroundColor: "light blue" }} />
-              </ReactFlow>
+          <Dialog PaperProps={{
+            style: {
+              minHeight: '60%',
+              minWidth: '48%',
+            }
+          }} open={open} onClose={handleClose}>
+            <div align="centre">
+              <CloseIcon onClick={handleClose} />
             </div>
+            <DialogTitle><div style={{ fontSize: "1.5vw", textAlign: "center", }} >
+              Details of the Table: {tabname}
+            </div></DialogTitle>
+            <div>
+              <TextField
+                sx={{ marginLeft: "30%", width: "260px" }}
+                autofocus
+                margin="auto"
+                value={tabname}
+                onChange={(e) => { onNameChange(e.target.value) }}
+                label="Table Name"
+                fullwidth />
+            </div>
+            <div>
+              <DialogContent>
+                <DynamicForm Form={formState[selectedNodeId]}
+                  inputStateList={formValues[selectedNodeId]}
+                  setInputStateList={getFormValues}
+                />
+              </DialogContent>
+            </div>
+            <div>
+              <Button style={{ backgroundColor: "#4CAF50", marginTop: "5%", marginLeft: "73%", marginBottom: "5%" }} variant="contained" onClick={() => addcolumn()}>Add Column</Button>
+            </div>
+          </Dialog>
+          <div>
+            <p>
+            </p>
+            <TextField id="outlined-basic" label="Project Name" value={projectName} onChange={(e) => { setProjectName(e.target.value) }} variant="outlined" />
+          </div>
+          <div>
 
-
-          </Grid>
-          <Grid item xs={1.2}>
-            <RightSidebar />
-          </Grid>
-        </Grid>
-        <Dialog PaperProps={{
-          style: {
-            minHeight: '60%',
-            minWidth: '50%',
-          }
-        }} open={open} onClose={handleClose}>
-          <div align="centre">
-            <CloseIcon onClick={handleClose} />
+            <p></p>
+            <Button style={{ backgroundColor: "#4C3A51" }} variant="contained" onClick={generateProject}>Generate Project</Button>
+            <p>
+            </p>
           </div>
-          <DialogTitle><div style={{ fontSize: "1.5vw", textAlign: "center", }} >
-            Configuration
-          </div></DialogTitle>
-          <div>
-            <TextField
-              // key={i}
-              sx={{ marginLeft: "33%" }}
-              autofocus
-              margin="auto"
-              // disabled={Props.isViewOnlyMode}
-              value={tabname}
-              onChange={(e) => { onNameChange(e.target.value)}}
-              // id={formobject.id}
-              label="Table Name"
-              // type={formobject.type}
-              fullwidth />
-          </div>
-          <div>
-            <DialogContent>
-              <DynamicForm Form={formState[selectedNodeId]}
-                inputStateList={formValues[selectedNodeId]}
-                setInputStateList={getFormValues}
-              />
-            </DialogContent>
-          </div>
-          <div>
-            <Button style={{ backgroundColor: "#4CAF50", marginTop: "5%", marginLeft: "73%" }} variant="contained" onClick={() => addcolumn(selectedNodeId)}>Add Column</Button>
-          </div>
-        </Dialog>
-        <div>
-          <p>
-          </p>
-          <TextField id="outlined-basic" label="Project Name" value={projectName} onChange={(e) => { setProjectName(e.target.value) }} variant="outlined" />
         </div>
-        <div>
-
-          <p></p>
-          <Button style={{ backgroundColor: "#4C3A51" }} variant="contained" onClick={generateProject}>Generate Project</Button>
-          <p>
-          </p>
-        </div>
-
-
-
-      </div>
+      </MyContext.Provider>
     </ReactFlowProvider>
 
   );

@@ -8,7 +8,7 @@ import ReactFlow, {
   Controls,
   Handle
 } from 'react-flow-renderer';
-import ArrayObjectOfNodes from './DestinationNodes.json'
+import ArrayObjectOfNodes from './Nodes.json'
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
@@ -26,13 +26,6 @@ const LeftSidebar = () => {
     event.dataTransfer.effectAllowed = 'move';
   }
 
-  // const onTableName = (event, nodeType, srcType) => {
-  //   let nodeInfo = { type: nodeType, nodeType: srcType }
-  //   event.dataTransfer.setData('application/reactflow', JSON.stringify(nodeInfo));
-  //   console.log("on table name change: ",nodeInfo.type)
-
-  // }
-
   return (
     <aside>
       <div className='groupsMagenta' style={{ fontSize: "1.5vw", textAlign: "center", marginTop: "56px", marginBottom: "8px", textDecoration: "underline" }} >
@@ -47,10 +40,6 @@ const LeftSidebar = () => {
           </div>
         )
       }
-      {/* <div>
-        <br/>
-        <TextField id="outlined-basic" label="Table Name" variant="outlined" onChange={(e) => onTableName(e, 'destination', e.target.value)} />
-      </div> */}
     </aside>
   );
 }
@@ -61,7 +50,7 @@ const SourceNodes = (type) => {
       sx={{
         width: 200,
         height: 100,
-        backgroundColor: '#EC994B',
+        backgroundColor: '#4C3A51',
         '&:hover': {
           backgroundColor: 'grey',
           opacity: [0.9, 0.8, 0.7],
@@ -71,7 +60,7 @@ const SourceNodes = (type) => {
     >
       <React.Fragment>
         <CardContent>
-          <Typography>Drag to drop Target Table
+          <Typography style={{color:"white"}}>Drag to drop Target Table
           </Typography>
         </CardContent>
 

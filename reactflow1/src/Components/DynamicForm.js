@@ -24,6 +24,7 @@ export default function DynamicForm(Props) {
         <div>
             {Props.Form.map((formobject, i) => (
                 i %3== 0 ? (<TextField
+                    style={{width:"226px"}}
                     key={i}
                     autofocus
                     margin="dense"
@@ -49,7 +50,7 @@ export default function DynamicForm(Props) {
                                 <MenuItem value={"INT"}>INT</MenuItem>
                             </Select>
                         </FormControl>
-                    ) : (i %3== 2 ? (<FormControl style={{ minWidth: 120, marginLeft: "20px", marginTop: "8px" }}>
+                    ) : (i %3== 2 ? (<FormControl style={{ width: "200px", marginLeft: "20px", marginTop: "8px" }}>
                         <InputLabel id="demo-simple-select-label">Key Type</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"

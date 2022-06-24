@@ -90,7 +90,7 @@ const sourceNode = ({ data }) => {
               {data.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              This is an input node.
+              This is a source table.
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -152,7 +152,7 @@ const destinationNode = ({ data }) => {
               {data.name}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              This is an output node.
+              This is a target table.
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -192,40 +192,41 @@ function useForceUpdate() {
 
 let id = 0;
 const getId = () => {
-  return "id:"+id++
+  return "id:" + id++
 };
-let fieldId=0;
-const getFeildId = () =>{
+
+let fieldId = 0;
+const getFeildId = () => {
   return fieldId++
 }
 
 const nodeTypes = { source: sourceNode, destination: destinationNode }
 
 
-const getTextBox=(i)=>{
-  const txt={
-  "id": "name"+i,
-  "label": "Column Name",
-  "defaultValue": "",
-  "type": "text"
+const getTextBox = (i) => {
+  const txt = {
+    "id": "name" + i,
+    "label": "Column Name",
+    "defaultValue": "",
+    "type": "text"
   }
   return txt
 }
-const checkbox1=(i)=>{
-  const txt={
-  "id": "path"+i,
-  "label": "Data Type",
-  "defaultValue": "",
-  "type": "text"
+const checkbox1 = (i) => {
+  const txt = {
+    "id": "path" + i,
+    "label": "Data Type",
+    "defaultValue": "",
+    "type": "text"
   }
   return txt
 }
-const checkbox2=(i)=>{
-  const txt={
-  "id": "header"+i,
-  "label": "Key Type",
-  "defaultValue": "",
-  "type": "text"
+const checkbox2 = (i) => {
+  const txt = {
+    "id": "header" + i,
+    "label": "Key Type",
+    "defaultValue": "",
+    "type": "text"
   }
   return txt
 }
@@ -251,7 +252,7 @@ function ReactFlowMainUI() {
   const handleClose = () => setOpen(false);
   const [nodeFormMapping, SetNodeFormMapping] = useState({});
   const forceUpdate = useForceUpdate();
-
+  const [tabname, setTabName] = useState("")
 
 
   const onConnect = useCallback((params) => {
@@ -325,6 +326,11 @@ function ReactFlowMainUI() {
 
   const onDoubleClickOfNode = (node) => {
     setSelectedNodeId(node.id)
+    nodes.map((n) => {
+      if (n.id == node.id) {
+        setTabName(n.data.name)
+      }
+    })
     handleOpen()
   }
 
@@ -367,14 +373,15 @@ function ReactFlowMainUI() {
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const nodeObjStr = event.dataTransfer.getData('application/reactflow');
-      console.log("here:",nodeObjStr)
+      console.log("here:", nodeObjStr)
       let nodeObj = JSON.parse(nodeObjStr)
       let nodeId = getId()
-      let fieldId=getFeildId()
+      let fieldId = getFeildId()
       let dynamicFormPrev = formValues
       let formFeilds = [getTextBox(fieldId), checkbox1(fieldId), checkbox2(fieldId)]
       const type = nodeObj.type
-      
+      console.log("pradyumn", nodeObj.type, " and ", nodeObj.nodeType)
+
       let inputStatePrev = formState
       inputStatePrev[nodeId] = formFeilds
       setFormState(inputStatePrev)
@@ -422,11 +429,11 @@ function ReactFlowMainUI() {
 
 
   const addcolumn = (nodeId) => {
-    let fieldId=getFeildId()
+    let fieldId = getFeildId()
     let dynamicFormPrev = formValues;
     console.log("formvalues")
     console.log(formValues)
-    let inputStatePrev= formState;
+    let inputStatePrev = formState;
     console.log("formstate")
     console.log(formState)
     inputStatePrev[selectedNodeId].push(getTextBox(fieldId));
@@ -439,6 +446,15 @@ function ReactFlowMainUI() {
     console.log(dynamicFormPrev)
     setFormValues(dynamicFormPrev)
     forceUpdate()
+  }
+
+  const onNameChange = (value) => {
+    setTabName(value)
+    nodes.map((n) => {
+      if (n.id == selectedNodeId) {
+        n.data.name = value;
+      }
+    })
   }
 
 
@@ -568,10 +584,10 @@ function ReactFlowMainUI() {
       </AppBar>
       <div className="dndflow">
         <Grid container spacing={2}>
-          <Grid item xs={1}>
+          <Grid item xs={1.2}>
             <LeftSidebar />
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={9.6}>
 
 
             <div className="reactflow-wrapper" style={{ height: "90vh", width: "100%" }} ref={reactFlowWrapper}>
@@ -597,14 +613,14 @@ function ReactFlowMainUI() {
 
 
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={1.2}>
             <RightSidebar />
           </Grid>
         </Grid>
         <Dialog PaperProps={{
           style: {
             minHeight: '60%',
-            minWidth: '30%',
+            minWidth: '50%',
           }
         }} open={open} onClose={handleClose}>
           <div align="centre">
@@ -614,6 +630,20 @@ function ReactFlowMainUI() {
             Configuration
           </div></DialogTitle>
           <div>
+            <TextField
+              // key={i}
+              sx={{ marginLeft: "33%" }}
+              autofocus
+              margin="auto"
+              // disabled={Props.isViewOnlyMode}
+              value={tabname}
+              onChange={(e) => { onNameChange(e.target.value)}}
+              // id={formobject.id}
+              label="Table Name"
+              // type={formobject.type}
+              fullwidth />
+          </div>
+          <div>
             <DialogContent>
               <DynamicForm Form={formState[selectedNodeId]}
                 inputStateList={formValues[selectedNodeId]}
@@ -622,7 +652,7 @@ function ReactFlowMainUI() {
             </DialogContent>
           </div>
           <div>
-            <Button style={{ backgroundColor: "#4CAF50", marginTop:"5%", marginLeft:"73%" }} variant="contained" onClick={()=>addcolumn(selectedNodeId)}>Add Column</Button>
+            <Button style={{ backgroundColor: "#4CAF50", marginTop: "5%", marginLeft: "73%" }} variant="contained" onClick={() => addcolumn(selectedNodeId)}>Add Column</Button>
           </div>
         </Dialog>
         <div>

@@ -37,7 +37,7 @@ const LeftSidebar = () => {
   return (
     <aside>
       <div className='groupsMagenta' style={{ fontSize: "1.5vw", textAlign: "center", marginTop: "56px", marginBottom: "8px", textDecoration: "underline" }} >
-        <strong> Source Nodes</strong>
+        <strong> Source Table</strong>
       </div>
       {
         ArrayObjectOfNodes.map(
@@ -57,7 +57,7 @@ const TargetNodes = (type) => {
     <Box
       sx={{
         width: 200,
-        height: 100,
+        height: 130,
         backgroundColor: '#EC994B',
         '&:hover': {
           backgroundColor: 'grey',
@@ -68,7 +68,7 @@ const TargetNodes = (type) => {
     >
       <React.Fragment>
         <CardContent>
-          <Typography>Drag this to drop {type} File
+          <Typography>Drag to drop Source Table
           </Typography>
         </CardContent>
 

@@ -1,18 +1,5 @@
 [
     {
-        "type": "Json",
-        "id": "1"
-    },
-    {
-        "type": "Xml",
-        "id": "2"
-    },
-    {
-        "type": "Csv",
-        "id": "3"
-    },
-    {
-        "type": "Xlsx",
-        "id": "4"
+        "type": "Table Name"
     }
 ]

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import ReactFlow, {
   ReactFlowProvider,
@@ -15,28 +15,42 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+
 
 const LeftSidebar = () => {
-  const onDragStart = (event, nodeType, srcType, formFeilds) => {
-    let nodeInfo = { type: nodeType, nodeType: srcType, formFeilds: formFeilds }
+
+  const onDragStart = (event, nodeType, srcType) => {
+    let nodeInfo = { type: nodeType, nodeType: srcType }
     event.dataTransfer.setData('application/reactflow', JSON.stringify(nodeInfo));
     event.dataTransfer.effectAllowed = 'move';
-  };
+  }
+
+  // const onTableName = (event, nodeType, srcType) => {
+  //   let nodeInfo = { type: nodeType, nodeType: srcType }
+  //   event.dataTransfer.setData('application/reactflow', JSON.stringify(nodeInfo));
+  //   console.log("on table name change: ",nodeInfo.type)
+
+  // }
 
   return (
     <aside>
       <div className='groupsMagenta' style={{ fontSize: "1.5vw", textAlign: "center", marginTop: "56px", marginBottom: "8px", textDecoration: "underline" }} >
-        <strong> Target Nodes</strong>
+        <strong> Target Table</strong>
       </div>
       {
         ArrayObjectOfNodes.map(
-          nodeInfo => <div key={nodeInfo.id} onDragStart={(event) => onDragStart(event, 'destination', nodeInfo.type, nodeInfo.formFeilds)} style={{ display: "flex", justifyContent: "center" }} draggable>
+          nodeInfo => <div key={nodeInfo.id} onDragStart={(event) => onDragStart(event, 'destination', nodeInfo.type)} style={{ display: "flex", justifyContent: "center" }} draggable>
             {
               SourceNodes(nodeInfo.type)
             }
           </div>
         )
       }
+      {/* <div>
+        <br/>
+        <TextField id="outlined-basic" label="Table Name" variant="outlined" onChange={(e) => onTableName(e, 'destination', e.target.value)} />
+      </div> */}
     </aside>
   );
 }
@@ -57,7 +71,7 @@ const SourceNodes = (type) => {
     >
       <React.Fragment>
         <CardContent>
-          <Typography>Drag this to drop {type} File
+          <Typography>Drag to drop Target Table
           </Typography>
         </CardContent>
 

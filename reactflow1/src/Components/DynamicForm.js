@@ -10,7 +10,7 @@ function useForceUpdate() {
 
 export default function DynamicForm(Props) {
     const [entryStateArray, setEntryStateArray] = React.useState(Props.inputStateList)
-    console.log(entryStateArray)
+    // console.log(entryStateArray)
     const forceUpdate = useForceUpdate();
     const setInInputListOnChange = (value, idx) => {
         let currState = Props.inputStateList

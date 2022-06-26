@@ -44,7 +44,7 @@ export default function CustomEdge({
 
   return (
     <>
-      {console.log("relation,", relation)}
+      {/* console.log("relation,", relation) */}
 
       <path
         id={id}

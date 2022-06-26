@@ -294,7 +294,7 @@ function ReactFlowMainUI() {
     for (let key in struct) {
       arr.push(struct[key])
     }
-    console.log("our structure is:", arr)
+    // console.log("our structure is:", arr)
     setStructuredData(arr)
   }
 
@@ -360,7 +360,7 @@ function ReactFlowMainUI() {
       }
       currObjDataStructure[id][obj.id] = {}
       currObjDataStructure[id][obj.id].value = obj.defaultValue
-      console.log(obj.defaultValue)
+      // console.log(obj.defaultValue)
 
       stateList.push(reObj)
     }
@@ -374,21 +374,21 @@ function ReactFlowMainUI() {
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
       const nodeObjStr = event.dataTransfer.getData('application/reactflow');
-      console.log("here:", nodeObjStr)
+      // console.log("here:", nodeObjStr)
       let nodeObj = JSON.parse(nodeObjStr)
       let nodeId = getId()
       let fieldId = getFeildId()
       let dynamicFormPrev = formValues
       let formFeilds = [getTextBox(fieldId), checkbox1(fieldId), checkbox2(fieldId)]
       const type = nodeObj.type
-      console.log("pradyumn", nodeObj.type, " and ", nodeObj.nodeType)
+      // console.log("pradyumn", nodeObj.type, " and ", nodeObj.nodeType)
 
       let inputStatePrev = formState
       inputStatePrev[nodeId] = formFeilds
       setFormState(inputStatePrev)
       dynamicFormPrev[nodeId] = stateListInitiator(formFeilds, nodeId)
-      console.log(dynamicFormPrev)
-      console.log(inputStatePrev)
+      // console.log(dynamicFormPrev)
+      // console.log(inputStatePrev)
       setFormValues(dynamicFormPrev)
 
       // check if the dropped element is valid
@@ -413,9 +413,9 @@ function ReactFlowMainUI() {
   );
 
   const generateProject = () => {
-    console.log("this")
-    console.log(structuredData)
-    console.log("ends")
+    // console.log("this")
+    // console.log(structuredData)
+    // console.log("ends")
     let resultCode = generateSQLCode(structuredData, projectName)
     let zip = new JSZip();
     zip.file(projectName + ".sql", resultCode)
@@ -431,19 +431,19 @@ function ReactFlowMainUI() {
   const addcolumn = () => {
     let fieldId = getFeildId()
     let dynamicFormPrev = formValues;
-    console.log("formvalues")
-    console.log(formValues)
+    // console.log("formvalues")
+    // console.log(formValues)
     let inputStatePrev = formState;
-    console.log("formstate")
-    console.log(formState)
+    // console.log("formstate")
+    // console.log(formState)
     inputStatePrev[selectedNodeId].push(getTextBox(fieldId));
     inputStatePrev[selectedNodeId].push(checkbox1(fieldId));
     inputStatePrev[selectedNodeId].push(checkbox2(fieldId));
-    console.log(inputStatePrev)
+    // console.log(inputStatePrev)
     setFormState(inputStatePrev);
-    console.log(inputStatePrev)
+    // console.log(inputStatePrev)
     dynamicFormPrev[selectedNodeId] = stateListInitiator(inputStatePrev[selectedNodeId], selectedNodeId)
-    console.log(dynamicFormPrev)
+    // console.log(dynamicFormPrev)
     setFormValues(dynamicFormPrev)
     forceUpdate()
   }
